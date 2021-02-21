@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:crypto_conversion/data/ApiService.dart';
+import 'package:crypto_conversion/feature/details/DetailsScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:crypto_conversion/CoinResponse.dart';
+import 'package:crypto_conversion/domain/response/CoinResponse.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key, this.title}) : super(key: key);
@@ -13,6 +14,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<Data> data;
+
   createListElementRow(Data data) {
     return addToContainer(
       Row(
@@ -59,6 +62,8 @@ class _HomeScreenState extends State<HomeScreen> {
       new Text(""),
     );
     var response = CoinsResponse.fromJson(jsonDecode(res.body));
+    this.data = response.data;
+
     response.data.forEach((element) {
       listOfElement.add(ListTile(title: createListElementRow(element)));
     });
@@ -76,8 +81,14 @@ class _HomeScreenState extends State<HomeScreen> {
         }
         // return row
         return new InkWell(
-          child: listOfElement[index],
-        );
+            child: listOfElement[index],
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DetailsScreen(data[index-1])),
+              );
+            });
       },
     );
   }
@@ -86,9 +97,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return TextStyle(
         color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold);
   }
+
   getHeaderText(String data) {
     return Text(data, textAlign: TextAlign.center, style: getStyle());
   }
+
   getElementText(String data) {
     return Center(
       child: Text(
@@ -117,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
-   }
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,4 @@
-import 'package:crypto_conversion/HomeScreen.dart';
+import 'package:crypto_conversion/feature/home/HomeScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
